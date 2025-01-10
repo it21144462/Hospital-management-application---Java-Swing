@@ -44,15 +44,12 @@ Medicare Plus+ is a Java Swing-based application designed to streamline hospital
    ```bash
    git clone https://github.com/your-username/medicare-plus.git
 2. Set Up the Database
+Make New Database named "medicare_plus"
 Import the provided SQL dump file medicare_plus.sql into MySQL.
 Update the database configuration in the DatabaseConnection class:
 
-- String url = "jdbc:mysql://localhost:3306/medicare_plus";
-- String username = "your-database-username";
-- String password = "your-database-password";
-[Uploading medicare_plus.sql…]()
 
-3. Build and Run the Application
+4. Build and Run the Application
 Open the project in your favorite IDE (e.g., IntelliJ IDEA, Eclipse).
 Compile and run the Main class to launch the application.
 

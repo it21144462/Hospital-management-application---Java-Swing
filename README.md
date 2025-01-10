@@ -73,7 +73,12 @@ Compile and run the Main class to launch the application.
 
 ## 🔒 Role-Based Access Logic
 Role	&  Accessible Modules
-Admin	- All modules
-Doctor	- View Channel, View Prescription, View Doctor
-Receptionist	- Patient, Create Channel, View Channel, Create Item, Create User, View Doctor
-Pharmacist	- View Prescription, Create Item, View Doctor
+- Admin	- All modules
+- Doctor	- View Channel, View Prescription, View Doctor
+- Receptionist	- Patient, Create Channel, View Channel, Create Item, Create User, View Doctor
+- Pharmacist	- View Prescription, Create Item, View Doctor
+
+## 🌟 Future Enhancements
+- Add audit logging for user actions.
+- Implement a responsive and modern UI using JavaFX or web-based frameworks.
+- Add real-time notifications for appointment updates.

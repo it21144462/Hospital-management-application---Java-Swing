@@ -1,0 +1,104 @@
+package medicareplus;
+
+import java.awt.EventQueue;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+public class Items extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField txtItemName;
+    private JTextArea txtDescription;
+    private JTextField txtSellPrice;
+    private JTextField txtBuyPrice;
+    private JTextField txtQty;
+    private JTable table;
+    private JLabel lblItemNo;
+    private DefaultTableModel model;
+    
+    private JButton btnAdd; // Declare btnAdd as a class-level variable
+    private JButton btnUpdate;
+    private JButton btnDelete;
+    private JButton btnExit;
+    
+    Connection con;
+    PreparedStatement pst;
+    ResultSet rs;
+    
+    public void Connect() {
+    	try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/medicare_plus","root","");
+		} catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database Connection Failed!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void AutoIncrementID() {
+        try {
+            Statement s = con.createStatement();
+            rs = s.executeQuery("SELECT MAX(itemno) FROM item");
+            rs.next();
+            String maxID = rs.getString("MAX(itemno)");
+
+            if (maxID == null) {
+                lblItemNo.setText("IT001");
+            } else {
+                long id = Long.parseLong(maxID.substring(2));
+                id++;
+                lblItemNo.setText("IT" + String.format("%03d", id));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to generate Item No!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Items frame = new Items();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	
+
+	/**
+	 * Create the frame.
+	 */
+	public Items() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+	}
+
+}

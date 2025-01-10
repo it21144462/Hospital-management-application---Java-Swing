@@ -1,0 +1,205 @@
+package medicareplus;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+public class Items extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField txtItemName;
+    private JTextArea txtDescription;
+    private JTextField txtSellPrice;
+    private JTextField txtBuyPrice;
+    private JTextField txtQty;
+    private JTable table;
+    private JLabel lblItemNo;
+    private DefaultTableModel model;
+    
+    private JButton btnAdd; // Declare btnAdd as a class-level variable
+    private JButton btnUpdate;
+    private JButton btnDelete;
+    private JButton btnExit;
+    
+    Connection con;
+    PreparedStatement pst;
+    ResultSet rs;
+    
+    public void Connect() {
+    	try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/medicare_plus","root","");
+		} catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database Connection Failed!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void AutoIncrementID() {
+        try {
+            Statement s = con.createStatement();
+            rs = s.executeQuery("SELECT MAX(itemno) FROM item");
+            rs.next();
+            String maxID = rs.getString("MAX(itemno)");
+
+            if (maxID == null) {
+                lblItemNo.setText("IT001");
+            } else {
+                long id = Long.parseLong(maxID.substring(2));
+                id++;
+                lblItemNo.setText("IT" + String.format("%03d", id));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to generate Item No!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Clears the input fields after user creation.
+     */
+    private void clearFields() {
+        txtItemName.setText("");
+        txtDescription.setText("");
+        txtSellPrice.setText("");
+        txtBuyPrice.setText("");
+        txtQty.setText("");
+        txtItemName.requestFocus();
+        btnAdd.setEnabled(true);
+        AutoIncrementID();
+    }
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Items frame = new Items();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	
+
+	/**
+	 * Create the frame.
+	 */
+	public Items() {
+		
+		Connect();
+		
+		setTitle("Medicare Plus+ Item Management");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 500);
+        contentPane = new JPanel();
+        contentPane.setBackground(new Color(30, 30, 30));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        JLabel lblTitle = new JLabel("Item Management");
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 18));
+        lblTitle.setForeground(Color.YELLOW);
+        lblTitle.setBounds(30, 0, 330, 30);
+        contentPane.add(lblTitle);
+
+        JPanel formPanel = new JPanel();
+        formPanel.setBackground(new Color(0, 0, 200));
+        formPanel.setBounds(20, 40, 330, 340);
+        formPanel.setLayout(null);
+        contentPane.add(formPanel);
+        
+        JLabel lblTitle1 = new JLabel("Item Management");
+        lblTitle1.setFont(new Font("Tahoma", Font.BOLD, 18));
+        lblTitle1.setForeground(Color.YELLOW);
+        lblTitle1.setBounds(60, 10, 200, 30);
+        formPanel.add(lblTitle1);
+
+        JLabel lblItemNoLabel = new JLabel("Item No");
+        lblItemNoLabel.setForeground(Color.WHITE);
+        lblItemNoLabel.setBounds(20, 50, 80, 25);
+        formPanel.add(lblItemNoLabel);
+
+        lblItemNo = new JLabel();
+        lblItemNo.setForeground(Color.YELLOW);
+        lblItemNo.setFont(new Font("Tahoma", Font.BOLD, 12));
+        lblItemNo.setBounds(140, 50, 100, 25);
+        formPanel.add(lblItemNo);
+
+        AutoIncrementID();
+
+        JLabel lblName = new JLabel("Item Name");
+        lblName.setForeground(Color.WHITE);
+        lblName.setBounds(20, 90, 100, 25);
+        formPanel.add(lblName);
+
+        txtItemName = new JTextField();
+        txtItemName.setBounds(140, 90, 160, 25);
+        formPanel.add(txtItemName);
+
+        JLabel lblDescription = new JLabel("Description");
+        lblDescription.setForeground(Color.WHITE);
+        lblDescription.setBounds(20, 130, 100, 25);
+        formPanel.add(lblDescription);
+
+        txtDescription = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(txtDescription);
+        scrollPane.setBounds(140, 130, 160, 60);
+        formPanel.add(scrollPane);
+
+        JLabel lblSellPrice = new JLabel("Sell Price" + " (Rs)");
+        lblSellPrice.setForeground(Color.WHITE);
+        lblSellPrice.setBounds(20, 200, 100, 25);
+        formPanel.add(lblSellPrice);
+
+        txtSellPrice = new JTextField();
+        txtSellPrice.setBounds(140, 200, 160, 25);
+        formPanel.add(txtSellPrice);
+
+        JLabel lblBuyPrice = new JLabel("Buy Price" + " (Rs)");
+        lblBuyPrice.setForeground(Color.WHITE);
+        lblBuyPrice.setBounds(20, 240, 100, 25);
+        formPanel.add(lblBuyPrice);
+
+        txtBuyPrice = new JTextField();
+        txtBuyPrice.setBounds(140, 240, 160, 25);
+        formPanel.add(txtBuyPrice);
+
+        JLabel lblQty = new JLabel("Quantity");
+        lblQty.setForeground(Color.WHITE);
+        lblQty.setBounds(20, 280, 100, 25);
+        formPanel.add(lblQty);
+
+        txtQty = new JTextField();
+        txtQty.setBounds(140, 280, 160, 25);
+        formPanel.add(txtQty);
+
+		setContentPane(contentPane);
+	}
+
+}

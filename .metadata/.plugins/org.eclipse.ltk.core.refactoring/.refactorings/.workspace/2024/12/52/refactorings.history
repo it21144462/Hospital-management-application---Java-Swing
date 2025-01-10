@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;Medicare_Plus_v2&apos;" deleteContents="false" description="Delete resource &apos;Medicare_Plus_v2&apos;" element1="/Medicare_Plus_v2" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1735014076793"/>&#x0A;<refactoring comment="Delete resource &apos;Medicare_Plus_v2&apos;" deleteContents="false" description="Delete resource &apos;Medicare_Plus_v2&apos;" element1="/Medicare_Plus_v2" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1735216175739"/>
+</session>

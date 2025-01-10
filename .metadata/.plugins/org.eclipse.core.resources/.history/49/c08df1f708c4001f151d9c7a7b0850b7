@@ -1,0 +1,468 @@
+////package medicareplus;
+////
+////import java.awt.EventQueue;
+////
+////import javax.swing.JFrame;
+////import javax.swing.JPanel;
+////import javax.swing.border.EmptyBorder;
+////
+////public class Prescription extends JFrame {
+////
+////	private static final long serialVersionUID = 1L;
+////	private JPanel contentPane;
+////
+////	/**
+////	 * Launch the application.
+////	 */
+////	public static void main(String[] args) {
+////		EventQueue.invokeLater(new Runnable() {
+////			public void run() {
+////				try {
+////					Prescription frame = new Prescription();
+////					frame.setVisible(true);
+////				} catch (Exception e) {
+////					e.printStackTrace();
+////				}
+////			}
+////		});
+////	}
+////
+////	/**
+////	 * Create the frame.
+////	 */
+////	public Prescription() {
+////		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+////		setBounds(100, 100, 450, 300);
+////		contentPane = new JPanel();
+////		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+////
+////		setContentPane(contentPane);
+////	}
+////
+////}
+//
+//package medicareplus;
+//
+//import java.awt.Color;
+//import java.awt.EventQueue;
+//import java.awt.Font;
+//import java.awt.event.ActionEvent;
+//import java.awt.event.ActionListener;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
+//import java.sql.PreparedStatement;
+//import java.sql.ResultSet;
+//import java.sql.Statement;
+//import javax.swing.JButton;
+//import javax.swing.JFrame;
+//import javax.swing.JLabel;
+//import javax.swing.JOptionPane;
+//import javax.swing.JPanel;
+//import javax.swing.JScrollPane;
+//import javax.swing.JTable;
+//import javax.swing.JTextArea;
+//import javax.swing.JTextField;
+//import javax.swing.border.EmptyBorder;
+//import javax.swing.table.DefaultTableModel;
+//
+//public class Prescription extends JFrame {
+//
+//    private static final long serialVersionUID = 1L;
+//    private JPanel contentPane;
+//    private JTextField txtPatientName, txtDoctorName, txtMedicineName, txtDosage;
+//    private JTextArea txtNotes;
+//    private JTable table;
+//    private JLabel lblPrescriptionNo;
+//    private DefaultTableModel model;
+//    private Connection con;
+//    private PreparedStatement pst;
+//    private ResultSet rs;
+//
+//    /**
+//     * Launch the application.
+//     */
+//    public static void main(String[] args) {
+//        EventQueue.invokeLater(() -> {
+//            try {
+//                Prescription frame = new Prescription();
+//                frame.setVisible(true);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
+//    }
+//
+//    /**
+//     * Create the frame.
+//     */
+//    public Prescription() {
+//        connectDatabase();
+//        initializeUI();
+//        autoIncrementID();
+//    }
+//
+//    // Connect to the database
+//    private void connectDatabase() {
+//        try {
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            con = DriverManager.getConnection("jdbc:mysql://localhost/medicare_plus", "root", "");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "Database Connection Failed!", "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
+//
+//    // Auto-generate Prescription ID
+//    private void autoIncrementID() {
+//        try {
+//            Statement stmt = con.createStatement();
+//            rs = stmt.executeQuery("SELECT MAX(prescription_no) FROM prescriptions");
+//            rs.next();
+//            String maxID = rs.getString(1);
+//            if (maxID == null) {
+//                lblPrescriptionNo.setText("PR001");
+//            } else {
+//                int id = Integer.parseInt(maxID.substring(2)) + 1;
+//                lblPrescriptionNo.setText("PR" + String.format("%03d", id));
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    // Initialize the UI components
+//    private void initializeUI() {
+//        setTitle("Prescription Management");
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setBounds(100, 100, 800, 600);
+//        contentPane = new JPanel();
+//        contentPane.setBackground(new Color(30, 30, 30));
+//        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+//        setContentPane(contentPane);
+//        contentPane.setLayout(null);
+//
+//        JLabel lblTitle = new JLabel("Prescription Management");
+//        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 18));
+//        lblTitle.setForeground(Color.YELLOW);
+//        lblTitle.setBounds(20, 10, 300, 30);
+//        contentPane.add(lblTitle);
+//
+//        JPanel formPanel = new JPanel();
+//        formPanel.setBackground(new Color(0, 0, 200));
+//        formPanel.setBounds(20, 50, 350, 450);
+//        formPanel.setLayout(null);
+//        contentPane.add(formPanel);
+//
+//        JLabel lblPrescriptionNoLabel = new JLabel("Prescription No:");
+//        lblPrescriptionNoLabel.setForeground(Color.WHITE);
+//        lblPrescriptionNoLabel.setBounds(20, 20, 120, 25);
+//        formPanel.add(lblPrescriptionNoLabel);
+//
+//        lblPrescriptionNo = new JLabel();
+//        lblPrescriptionNo.setForeground(Color.YELLOW);
+//        lblPrescriptionNo.setBounds(150, 20, 150, 25);
+//        formPanel.add(lblPrescriptionNo);
+//
+//        JLabel lblPatientName = new JLabel("Patient Name:");
+//        lblPatientName.setForeground(Color.WHITE);
+//        lblPatientName.setBounds(20, 60, 120, 25);
+//        formPanel.add(lblPatientName);
+//
+//        txtPatientName = new JTextField();
+//        txtPatientName.setBounds(150, 60, 150, 25);
+//        formPanel.add(txtPatientName);
+//
+//        JLabel lblDoctorName = new JLabel("Doctor Name:");
+//        lblDoctorName.setForeground(Color.WHITE);
+//        lblDoctorName.setBounds(20, 100, 120, 25);
+//        formPanel.add(lblDoctorName);
+//
+//        txtDoctorName = new JTextField();
+//        txtDoctorName.setBounds(150, 100, 150, 25);
+//        formPanel.add(txtDoctorName);
+//
+//        JLabel lblMedicineName = new JLabel("Medicine Name:");
+//        lblMedicineName.setForeground(Color.WHITE);
+//        lblMedicineName.setBounds(20, 140, 120, 25);
+//        formPanel.add(lblMedicineName);
+//
+//        txtMedicineName = new JTextField();
+//        txtMedicineName.setBounds(150, 140, 150, 25);
+//        formPanel.add(txtMedicineName);
+//
+//        JLabel lblDosage = new JLabel("Dosage:");
+//        lblDosage.setForeground(Color.WHITE);
+//        lblDosage.setBounds(20, 180, 120, 25);
+//        formPanel.add(lblDosage);
+//
+//        txtDosage = new JTextField();
+//        txtDosage.setBounds(150, 180, 150, 25);
+//        formPanel.add(txtDosage);
+//
+//        JLabel lblNotes = new JLabel("Notes:");
+//        lblNotes.setForeground(Color.WHITE);
+//        lblNotes.setBounds(20, 220, 120, 25);
+//        formPanel.add(lblNotes);
+//
+//        txtNotes = new JTextArea();
+//        JScrollPane scrollPane = new JScrollPane(txtNotes);
+//        scrollPane.setBounds(150, 220, 150, 100);
+//        formPanel.add(scrollPane);
+//
+//        JButton btnAdd = new JButton("Add");
+//        btnAdd.setBounds(30, 340, 80, 30);
+//        formPanel.add(btnAdd);
+//
+//        JButton btnUpdate = new JButton("Update");
+//        btnUpdate.setBounds(120, 340, 90, 30);
+//        formPanel.add(btnUpdate);
+//
+//        JButton btnDelete = new JButton("Delete");
+//        btnDelete.setBounds(220, 340, 80, 30);
+//        formPanel.add(btnDelete);
+//
+//        JButton btnExit = new JButton("Exit");
+//        btnExit.setBounds(120, 380, 90, 30);
+//        formPanel.add(btnExit);
+//
+//        // Table
+//        String[] columns = {"Prescription No", "Patient Name", "Doctor Name", "Medicine Name", "Dosage", "Notes"};
+//        model = new DefaultTableModel(columns, 0);
+//        table = new JTable(model);
+//        JScrollPane tableScrollPane = new JScrollPane(table);
+//        tableScrollPane.setBounds(400, 50, 350, 450);
+//        contentPane.add(tableScrollPane);
+//
+//        // Button actions
+//        btnAdd.addActionListener(e -> addPrescription());
+//        btnUpdate.addActionListener(e -> updatePrescription());
+//        btnDelete.addActionListener(e -> deletePrescription());
+//        btnExit.addActionListener(e -> dispose());
+//    }
+//
+//    // Add a prescription
+//    private void addPrescription() {
+//        String prescriptionNo = lblPrescriptionNo.getText();
+//        String patientName = txtPatientName.getText();
+//        String doctorName = txtDoctorName.getText();
+//        String medicineName = txtMedicineName.getText();
+//        String dosage = txtDosage.getText();
+//        String notes = txtNotes.getText();
+//
+//        try {
+//            pst = con.prepareStatement("INSERT INTO prescriptions (prescription_no, patient_name, doctor_name, medicine_name, dosage, notes) VALUES (?, ?, ?, ?, ?, ?)");
+//            pst.setString(1, prescriptionNo);
+//            pst.setString(2, patientName);
+//            pst.setString(3, doctorName);
+//            pst.setString(4, medicineName);
+//            pst.setString(5, dosage);
+//            pst.setString(6, notes);
+//            pst.executeUpdate();
+//            JOptionPane.showMessageDialog(this, "Prescription Added!");
+//            clearFields();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    // Update a prescription
+//    private void updatePrescription() {
+//        // Implementation goes here
+//    }
+//
+//    // Delete a prescription
+//    private void deletePrescription() {
+//        // Implementation goes here
+//    }
+//
+//    // Clear input fields
+//    private void clearFields() {
+//        txtPatientName.setText("");
+//        txtDoctorName.setText("");
+//        txtMedicineName.setText("");
+//        txtDosage.setText("");
+//        txtNotes.setText("");
+//        autoIncrementID();
+//    }
+//}
+//
+package medicareplus;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Prescription extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private JPanel mainPanel;
+    private JLabel prescriptionNoValue;
+    private JTextField channelNoField;
+    private JTextField diseaseTypeField;
+    private JTextArea descriptionArea;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                PrescriptionUI frame = new PrescriptionUI();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Create the frame.
+     */
+    public PrescriptionUI() {
+        // Frame settings
+        setTitle("Prescription Form");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 500, 400);
+        setLayout(null);
+        setLocationRelativeTo(null);
+
+        // Initialize main panel
+        initMainPanel();
+
+        // Add header label
+        addHeaderLabel();
+
+        // Add form fields
+        addFormFields();
+
+        // Add Create button
+        addCreateButton();
+    }
+
+    /**
+     * Initializes the main panel.
+     */
+    private void initMainPanel() {
+        mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(51, 0, 51)); // Dark purple background
+        mainPanel.setBounds(20, 20, 440, 300);
+        mainPanel.setLayout(null);
+        add(mainPanel);
+    }
+
+    /**
+     * Adds the header label to the panel.
+     */
+    private void addHeaderLabel() {
+        JLabel headerLabel = new JLabel("Prescription");
+        headerLabel.setForeground(Color.YELLOW);
+        headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerLabel.setBounds(20, 10, 150, 30);
+        mainPanel.add(headerLabel);
+    }
+
+    /**
+     * Adds form fields to the panel.
+     */
+    private void addFormFields() {
+        // Prescription No
+        JLabel prescriptionNoLabel = createLabel("Prescription No", 20, 50);
+        mainPanel.add(prescriptionNoLabel);
+
+        prescriptionNoValue = createValueLabel("jLabel5", 150, 50);
+        mainPanel.add(prescriptionNoValue);
+
+        // Channel No
+        JLabel channelNoLabel = createLabel("Channel No", 20, 90);
+        mainPanel.add(channelNoLabel);
+
+        channelNoField = createTextField(150, 90);
+        mainPanel.add(channelNoField);
+
+        // Disease Type
+        JLabel diseaseTypeLabel = createLabel("Disease Type", 20, 130);
+        mainPanel.add(diseaseTypeLabel);
+
+        diseaseTypeField = createTextField(150, 130);
+        mainPanel.add(diseaseTypeField);
+
+        // Description
+        JLabel descriptionLabel = createLabel("Description", 20, 170);
+        mainPanel.add(descriptionLabel);
+
+        descriptionArea = new JTextArea();
+        descriptionArea.setLineWrap(true);
+        descriptionArea.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(descriptionArea);
+        scrollPane.setBounds(150, 170, 200, 70);
+        mainPanel.add(scrollPane);
+    }
+
+    /**
+     * Adds the Create button to the frame.
+     */
+    private void addCreateButton() {
+        JButton createButton = new JButton("Create");
+        createButton.setBounds(350, 290, 80, 30);
+        createButton.addActionListener(e -> handleCreateAction());
+        add(createButton);
+    }
+
+    /**
+     * Handles the Create button action.
+     */
+    private void handleCreateAction() {
+        String channelNo = channelNoField.getText();
+        String diseaseType = diseaseTypeField.getText();
+        String description = descriptionArea.getText();
+
+        if (channelNo.isEmpty() || diseaseType.isEmpty() || description.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields must be filled!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Prescription Created Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            clearFields();
+        }
+    }
+
+    /**
+     * Clears the form fields.
+     */
+    private void clearFields() {
+        channelNoField.setText("");
+        diseaseTypeField.setText("");
+        descriptionArea.setText("");
+        channelNoField.requestFocus();
+    }
+
+    /**
+     * Utility method to create labels.
+     */
+    private JLabel createLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setForeground(Color.YELLOW);
+        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setBounds(x, y, 120, 30);
+        return label;
+    }
+
+    /**
+     * Utility method to create value labels.
+     */
+    private JLabel createValueLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setForeground(Color.WHITE);
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
+        label.setBounds(x, y, 100, 30);
+        return label;
+    }
+
+    /**
+     * Utility method to create text fields.
+     */
+    private JTextField createTextField(int x, int y) {
+        JTextField textField = new JTextField();
+        textField.setBounds(x, y, 200, 25);
+        return textField;
+    }
+}
+
+

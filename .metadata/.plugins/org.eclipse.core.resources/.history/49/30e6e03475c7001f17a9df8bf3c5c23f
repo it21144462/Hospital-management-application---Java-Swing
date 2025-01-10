@@ -1,0 +1,218 @@
+//package medicareplus;
+//
+//import java.awt.EventQueue;
+//
+//import javax.swing.JFrame;
+//import javax.swing.JPanel;
+//import javax.swing.border.EmptyBorder;
+//
+//public class Inventory extends JFrame {
+//
+//	private static final long serialVersionUID = 1L;
+//	private JPanel contentPane;
+//
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Inventory frame = new Inventory();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+//
+//	/**
+//	 * Create the frame.
+//	 */
+//	public Inventory() {
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setBounds(100, 100, 450, 300);
+//		contentPane = new JPanel();
+//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+//
+//		setContentPane(contentPane);
+//	}
+//
+//}
+
+package medicareplus;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+public class Inventory extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+//    private JPanel contentPane;
+//    private JTextField txtPrescriptionID, txtDrugCode, txtDrugName, txtQty, txtTotalCost, txtPay, txtBalance;
+//    private JTable table;
+//    private DefaultTableModel tableModel;
+    private JPanel contentPane;
+    private JTextField txtDrugCode;
+    private JTextField txtDrugName;
+    private JTextField txtTotalCost;
+    private JTextField txtPay;
+    private JTextField txtBalance;
+    private JSpinner spinnerQty;
+    private JTable table;
+    private DefaultTableModel tableModel;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+                Inventory frame = new Inventory();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Create the frame.
+     */
+    public Inventory() {
+    	setTitle("Inventory Management");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 600);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(null);
+        contentPane.setBackground(new Color(64, 0, 64));
+        setContentPane(contentPane);
+        
+        // Title
+        JLabel lblTitle = new JLabel("Inventory Management");
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 18));
+        lblTitle.setForeground(Color.YELLOW);
+        lblTitle.setBounds(300, 10, 250, 30);
+        contentPane.add(lblTitle);
+
+        // Labels and text fields
+        JLabel lblPrescriptionID = new JLabel("Prescription ID");
+        lblPrescriptionID.setForeground(Color.YELLOW);
+        lblPrescriptionID.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblPrescriptionID.setBounds(20, 20, 120, 25);
+        contentPane.add(lblPrescriptionID);
+
+//        txtPrescriptionID = new JTextField("jLabel6");
+//        txtPrescriptionID.setBounds(150, 20, 150, 25);
+//        txtPrescriptionID.setEditable(false);
+//        contentPane.add(txtPrescriptionID);
+
+        JLabel lblDrugCode = new JLabel("Drug Code");
+        lblDrugCode.setForeground(Color.YELLOW);
+        lblDrugCode.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblDrugCode.setBounds(20, 60, 120, 25);
+        contentPane.add(lblDrugCode);
+
+        txtDrugCode = new JTextField();
+        txtDrugCode.setBounds(150, 60, 150, 25);
+        contentPane.add(txtDrugCode);
+
+        JLabel lblDrugName = new JLabel("Drug Name");
+        lblDrugName.setForeground(Color.YELLOW);
+        lblDrugName.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblDrugName.setBounds(20, 100, 120, 25);
+        contentPane.add(lblDrugName);
+
+        txtDrugName = new JTextField();
+        txtDrugName.setBounds(150, 100, 150, 25);
+        contentPane.add(txtDrugName);
+
+        JLabel lblQty = new JLabel("Qty");
+        lblQty.setForeground(Color.YELLOW);
+        lblQty.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblQty.setBounds(20, 140, 120, 25);
+        contentPane.add(lblQty);
+
+//        txtQty = new JTextField();
+//        txtQty.setBounds(150, 140, 150, 25);
+//        contentPane.add(txtQty);
+
+        JButton btnAdd = new JButton("Add");
+        btnAdd.setBounds(150, 180, 80, 30);
+        contentPane.add(btnAdd);
+
+        JLabel lblTotalCost = new JLabel("TotalCost");
+        lblTotalCost.setForeground(Color.YELLOW);
+        lblTotalCost.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblTotalCost.setBounds(400, 20, 120, 25);
+        contentPane.add(lblTotalCost);
+
+        txtTotalCost = new JTextField();
+        txtTotalCost.setBounds(500, 20, 150, 25);
+        txtTotalCost.setEditable(false);
+        contentPane.add(txtTotalCost);
+
+        JLabel lblPay = new JLabel("Pay");
+        lblPay.setForeground(Color.YELLOW);
+        lblPay.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblPay.setBounds(400, 60, 120, 25);
+        contentPane.add(lblPay);
+
+        txtPay = new JTextField();
+        txtPay.setBounds(500, 60, 150, 25);
+        contentPane.add(txtPay);
+
+        JLabel lblBalance = new JLabel("Balance");
+        lblBalance.setForeground(Color.YELLOW);
+        lblBalance.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblBalance.setBounds(400, 100, 120, 25);
+        contentPane.add(lblBalance);
+
+        txtBalance = new JTextField();
+        txtBalance.setBounds(500, 100, 150, 25);
+        txtBalance.setEditable(false);
+        contentPane.add(txtBalance);
+
+        JButton btnSalesUp = new JButton("SalesUp");
+        btnSalesUp.setBounds(500, 140, 100, 30);
+        contentPane.add(btnSalesUp);
+
+        // Table
+        tableModel = new DefaultTableModel(new Object[]{"Prescription ID", "Drug Code", "Drug Name", "Qty", "Price", "Total"}, 0);
+        table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(20, 250, 740, 250);
+        contentPane.add(scrollPane);
+
+//        // Add ActionListener for Add button
+//        btnAdd.addActionListener(e -> {
+//            String prescriptionID = txtPrescriptionID.getText();
+//            String drugCode = txtDrugCode.getText();
+//            String drugName = txtDrugName.getText();
+//            int qty = Integer.parseInt(txtQty.getText());
+//            double price = 50.00; // Sample price for testing
+//            double total = qty * price;
+//
+//            // Add row to the table
+//            tableModel.addRow(new Object[]{prescriptionID, drugCode, drugName, qty, price, total});
+//
+//            // Update total cost
+//            double totalCost = Double.parseDouble(txtTotalCost.getText().isEmpty() ? "0" : txtTotalCost.getText());
+//            totalCost += total;
+//            txtTotalCost.setText(String.valueOf(totalCost));
+//        });
+
+        // Add ActionListener for SalesUp button
+        btnSalesUp.addActionListener(e -> {
+            double totalCost = Double.parseDouble(txtTotalCost.getText().isEmpty() ? "0" : txtTotalCost.getText());
+            double pay = Double.parseDouble(txtPay.getText().isEmpty() ? "0" : txtPay.getText());
+            double balance = pay - totalCost;
+            txtBalance.setText(String.valueOf(balance));
+        });
+    }
+}

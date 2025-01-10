@@ -57,29 +57,19 @@ Compile and run the Main class to launch the application.
 
 
 ## 📂 Project Structure
-src/
-├── medicareplus/
-│   ├── Main.java          # Application entry point
-
-│   ├── Patient.java       # Patient management module
-
-│   ├── Doctor.java        # Doctor management module
-
-│   ├── Channel.java       # Channel creation module
-
-│   ├── ViewChannel.java   # Channel viewing module
-
-│   ├── ViewPrescription.java # Prescription viewing module
-
-│   ├── Items.java         # Inventory management module
-
-│   ├── User.java          # User management module
-
-│   ├── MonthlyReport.java # Monthly report generation
-
-│   ├── Login.java         # Login system
-
-│   └── DatabaseConnection.java # Database connectivity
+- src/
+- ├── medicareplus/
+- │   ├── Main.java          # Application entry point
+- │   ├── Patient.java       # Patient management module
+- │   ├── Doctor.java        # Doctor management module
+- │   ├── Channel.java       # Channel creation module
+- │   ├── ViewChannel.java   # Channel viewing module
+- │   ├── ViewPrescription.java # Prescription viewing module
+- │   ├── Items.java         # Inventory management module
+- │   ├── User.java          # User management module
+- │   ├── MonthlyReport.java # Monthly report generation
+- │   ├── Login.java         # Login system
+- │   └── DatabaseConnection.java # Database connectivity
 
 ## 🔒 Role-Based Access Logic
 Role	&  Accessible Modules

@@ -50,6 +50,7 @@ Update the database configuration in the DatabaseConnection class:
 - String url = "jdbc:mysql://localhost:3306/medicare_plus";
 - String username = "your-database-username";
 - String password = "your-database-password";
+[Uploading medicare_plus.sql…]()
 
 3. Build and Run the Application
 Open the project in your favorite IDE (e.g., IntelliJ IDEA, Eclipse).
